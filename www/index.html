@@ -179,12 +179,16 @@
     
     // ButtonAがクリックされた時の処理
     function btnAClick(e){
+        $('#btnA').prop('disabled', true);
+        $('#btnB').prop('disabled', false);
         active = true;
         startTime = new Date();
     }
 
     // ButtonBがクリックされた時の処理
     function btnBClick(e){
+        $('#btnA').prop('disabled', false);
+        $('#btnB').prop('disabled', true);
         active = false;
     }
 

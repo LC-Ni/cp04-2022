@@ -150,6 +150,8 @@
     var active = false;
     var startTime = 0;
     var period = 0;
+    var time = 0;
+    var tmp = 0;
 
     // ボタンの初期設定
     function init(){
@@ -186,29 +188,35 @@
         $('#btnA').prop('disabled', false);
         $('#btnB').prop('disabled', true);
         active = false;
+        tmp += time;
     }
 
     // ButtonCがクリックされた時の処理
     function btnCClick(e){
+        $('#btnA').prop('disabled', false);
+        $('#btnB').prop('disabled', false);
         alarm();
         active = false;
         period = 60 * parseInt( $("#minute").val() ) + parseInt( $("#second").val() );
+        var m = parseInt(period/60);
+        var s = parseInt(period - m*60);
         $("#time").html("経過時間: 0");
-        $("#remain").html("残り時間: "+ period);
+        $("#remain").html("残り時間: "+ period + "(" + m + "m" + s + "s" + ")");
     }
     
  
     // 繰り返し実行する処理
     function timer(){
         if(active){
-            var time = parseInt((new Date() - startTime) / 1000);
-            var rest = period - time;
+            time = parseInt((new Date() - startTime) / 1000);
+            var rest = period - time - tmp;
             var m = parseInt(rest/60);
             var s = parseInt(rest - m*60);
-            $("#time").html("経過時間: " + time);
-            $("#remain").html("残り時間: "+ rest + "(" + m + "m" + s + "s");
+            $("#time").html("経過時間: " + (time + tmp));
+            $("#remain").html("残り時間: "+ rest + "(" + m + "m" + s + "s" + ")");
             analog(rest);
             if(rest <= 0){
+            $('#btnA').prop('disabled', false);
                 active = false;
                 alarm();
             }

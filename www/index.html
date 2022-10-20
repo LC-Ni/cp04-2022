@@ -156,8 +156,11 @@
 
         // ボタンの初期設定
         function init() {
+            alarm();
             $('#btnA').prop('disabled', false);
-            $('#btnB').prop('disabled', false);
+            $('#btnB').prop('disabled', true);
+            btnA.textContent = "Start";
+            btnB.textContent = "---";
             period = 60 * parseInt($("#minute").val()) + parseInt($("#second").val());
             var m = parseInt(period / 60);
             var s = parseInt(period - m * 60);
@@ -179,31 +182,36 @@
             //audio.play();
         }
 
-        function flag() {
-        }
-
         // ButtonAがクリックされた時の処理
         function btnAClick(e) {
             let btnA = document.getElementById("btnA");
 
             if (btnA.textContent == "Start") {
+                init();
                 active = true;
                 startTime = new Date();
                 btnA.textContent = "Cancel";
-                init();
+                btnB.textContent = "Stop";
+            $('#btnB').prop('disabled', false);
             } else {
+                init();
                 tmp = 0;
-                alarm();
                 active = false;
                 btnA.textContent = "Start";
-                init();
             }
         }
 
         // ButtonBがクリックされた時の処理
         function btnBClick(e) {
-            active = false;
-            tmp += time;
+            if(active){
+                active = false;
+                tmp += time;
+                btnB.textContent = "Restart";
+            }else {
+                active = true;
+                startTime = new Date();
+                btnB.textContent = "Stop";
+            }
         }
 
         // 繰り返し実行する処理
@@ -218,9 +226,8 @@
                 analog(rest);
                 if (rest <= 0) {
                     tmp = 0;
-                    $('#btnA').prop('disabled', false);
                     active = false;
-                    alarm();
+                    init();
                 }
                 var mstr = "分: ";
                 for (let i = 0; i < m; i++) {
@@ -245,8 +252,8 @@
 
     <div id="remain">Remaining time</div>
     <div id="time">Time</div>
-    <button id="btnA" onclick="flag()">Start</button>
-    <button id="btnB">Stop</button>
+    <button id="btnA">Start</button>
+    <button id="btnB">---</button>
     <input type="number" id="minute" value=0>
     <input type="number" id="second" value=15>
 </body>

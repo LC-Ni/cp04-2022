@@ -158,8 +158,11 @@
         function init() {
             $('#btnA').prop('disabled', false);
             $('#btnB').prop('disabled', false);
-            $('#btnC').prop('disabled', false);
-            btnAClick(null);
+            period = 60 * parseInt($("#minute").val()) + parseInt($("#second").val());
+            var m = parseInt(period / 60);
+            var s = parseInt(period - m * 60);
+            $("#time").html("経過時間: 0");
+            $("#remain").html("残り時間: " + period + "(" + m + "m" + s + "s" + ")");
         }
 
         // Alarmの処理
@@ -187,23 +190,18 @@
                 active = true;
                 startTime = new Date();
                 btnA.textContent = "Cancel";
+                init();
             } else {
                 tmp = 0;
                 alarm();
                 active = false;
-                period = 60 * parseInt($("#minute").val()) + parseInt($("#second").val());
-                var m = parseInt(period / 60);
-                var s = parseInt(period - m * 60);
-                $("#time").html("経過時間: 0");
-                $("#remain").html("残り時間: " + period + "(" + m + "m" + s + "s" + ")");
                 btnA.textContent = "Start";
+                init();
             }
         }
 
         // ButtonBがクリックされた時の処理
         function btnBClick(e) {
-            $('#btnA').prop('disabled', false);
-            $('#btnB').prop('disabled', true);
             active = false;
             tmp += time;
         }
@@ -247,7 +245,7 @@
 
     <div id="remain">Remaining time</div>
     <div id="time">Time</div>
-    <button id="btnA" onclick="flag()">---</button>
+    <button id="btnA" onclick="flag()">Start</button>
     <button id="btnB">Stop</button>
     <input type="number" id="minute" value=0>
     <input type="number" id="second" value=15>
